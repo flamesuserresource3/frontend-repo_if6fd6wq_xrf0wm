@@ -1,28 +1,33 @@
-import { useState } from 'react'
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import CountdownIntro from './components/CountdownIntro';
+import GreetingCard from './components/GreetingCard';
+import InteractiveCake from './components/InteractiveCake';
+import SceneOrnament from './components/SceneOrnament';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [stage, setStage] = useState(0); // 0=countdown, 1=card, 2=cake
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
-        </div>
-      </div>
+    <div className="relative min-h-screen w-screen overflow-hidden">
+      <SceneOrnament />
+      <AnimatePresence mode="wait">
+        {stage === 0 && (
+          <motion.div key="s0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <CountdownIntro onComplete={() => setStage(1)} />
+          </motion.div>
+        )}
+        {stage === 1 && (
+          <motion.div key="s1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <GreetingCard onNext={() => setStage(2)} />
+          </motion.div>
+        )}
+        {stage === 2 && (
+          <motion.div key="s2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <InteractiveCake />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
-  )
+  );
 }
-
-export default App
